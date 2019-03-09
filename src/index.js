@@ -1,7 +1,7 @@
 require('dotenv').config();
 const puppeteer = require('puppeteer');
 const fileSystem = require('fs');
-
+const nodemailer = require('nodemailer');
 
 const scrape = async () => {
     const browser = await puppeteer.launch({headless: false});
@@ -31,7 +31,75 @@ const scrape = async () => {
     });
 
     browser.close();
+    await emailSend(result);
     return result;
+}
+
+const emailSend = async (products) => {
+    const email = process.env.EMAIL;
+    const password = process.env.PASSWORD;
+
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: email,
+            pass: password 
+        }
+    });
+
+    const mailOptions = {
+        from: email, 
+        to: email, 
+        subject: 'The Sims 4 Prices', 
+        html: `
+            <h1>The Sims 4 Prices</h1> 
+            <ul>
+                ${products.map(product => 
+                    `<li>
+                        <h2>${product.title}</h2>
+                        <ul>
+                            ${
+                                product.price.original 
+                                ? 
+                                `<li>
+                                    <p>
+                                        <b>Original:</b> ${product.price.original}
+                                    </p>
+                                </li>`
+                                : ''
+                            }           
+                            ${
+                                product.price.discount 
+                                ? 
+                                `<li>
+                                    <p>
+                                        <b>Discount:</b> ${product.price.discount}%
+                                    </p>
+                                </li>`
+                                : ''
+                            } 
+                            ${
+                                product.price.final 
+                                ? 
+                                `<li>
+                                    <p>
+                                        <b>Final:</b> ${product.price.final}
+                                    </p>
+                                </li>`
+                                : ''
+                            } 
+                        </ul>
+                    </li>`
+                ).join('')}
+            </ul>
+        `
+    };
+    
+   await transporter.sendMail(mailOptions, function (error, info) {
+        if(error) console.log(error)
+        else console.log(info);
+   });
+
 }
 
 scrape()
