@@ -1,5 +1,6 @@
 require('dotenv').config();
 const puppeteer = require('puppeteer');
+const fileSystem = require('fs');
 
 
 const scrape = async () => {
@@ -34,5 +35,9 @@ const scrape = async () => {
 }
 
 scrape()
-.then((value) => console.log(value))
+.then((value) => {
+    fileSystem.writeFile('./products.json', JSON.stringify(value), (error) => {
+        if (error) console.log(error);
+    })
+})
 .catch((error) => console.log(error));
