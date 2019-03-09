@@ -1,0 +1,29 @@
+{
+  "name": "thesims-price-scraping",
+  "version": "1.0.0",
+  "description": "The sims 4 price scraping on EA site",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karolinedealencar/thesims-price-scraping.git"
+  },
+  "keywords": [
+    "scraping",
+    "nodejs",
+    "thesims4"
+  ],
+  "author": "Karoline Alencar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/karolinedealencar/thesims-price-scraping/issues"
+  },
+  "homepage": "https://github.com/karolinedealencar/thesims-price-scraping#readme",
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "nodemailer": "^5.1.1",
+    "puppeteer": "^1.13.0"
+  }
+}
